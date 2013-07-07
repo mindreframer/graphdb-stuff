@@ -1,0 +1,97 @@
+= orientdb4r - Ruby binding for Orient DB
+
+A Ruby client for the NoSQL Graph/Document database Orient DB (http://orientdb.org).
+
+== USAGE
+
+see Wiki page for more sample at https://github.com/veny/orientdb4r/wiki
+
+
+  require 'orientdb4r'
+
+  CLASS = 'myclass'
+
+  client = Orientdb4r.client  # equivalent for :host => 'localhost', :port => 2480, :ssl => false
+
+  client.database_exists? :database => 'temp', :user => 'admin', :password => 'admin'
+  => true
+
+  client.connect :database => 'temp', :user => 'admin', :password => 'admin'
+
+  unless client.class_exists? CLASS
+    client.create_class(CLASS) do |c|
+      c.property 'prop1', :integer, :notnull => true, :min => 1, :max => 99
+      c.property 'prop2', :string, :mandatory => true
+      c.link     'users', :linkset, 'OUser' # by default: :mandatory => false, :notnull => false
+    end
+  end
+
+  admin = client.query("SELECT FROM OUser WHERE name = 'admin'")[0]
+  1.upto(5) do |i|
+    # insert link to admin only to first two
+    client.command "INSERT INTO #{CLASS} (prop1, prop2, users) VALUES (#{i}, 'text#{i}', [#{admin['@rid'] if i<3}])"
+  end
+
+  puts client.query "SELECT FROM #{CLASS}"
+  => {"@type"=>"d", "@rid"=>"#6:0", "@version"=>0, "@class"=>"myclass", "prop1"=>1, "prop2"=>"text1", "users"=>["#4:0"]}
+  => {"@type"=>"d", "@rid"=>"#6:1", "@version"=>0, "@class"=>"myclass", "prop1"=>2, "prop2"=>"text2", "users"=>["#4:0"]}
+  => {"@type"=>"d", "@rid"=>"#6:2", "@version"=>0, "@class"=>"myclass", "prop1"=>3, "prop2"=>"text3", "users"=>[]}
+  => {"@type"=>"d", "@rid"=>"#6:3", "@version"=>0, "@class"=>"myclass", "prop1"=>4, "prop2"=>"text4", "users"=>[]}
+  => {"@type"=>"d", "@rid"=>"#6:4", "@version"=>0, "@class"=>"myclass", "prop1"=>5, "prop2"=>"text5", "users"=>[]}
+
+  puts client.query "SELECT count(*) FROM #{CLASS}"
+  => {"@type"=>"d", "@version"=>0, "count"=>5, "@fieldTypes"=>"count=l"}
+
+  puts client.query "SELECT max(prop1) FROM #{CLASS}"
+  => {"@type"=>"d", "@version"=>0, "max"=>5}
+
+  puts client.query "TRAVERSE any() FROM (SELECT FROM #{CLASS} WHERE prop1 = 1)"
+  => {"@type"=>"d", "@rid"=>"#6:0", "@version"=>0, "@class"=>"myclass", "prop1"=>1, "prop2"=>"text1", "users"=>["#4:0"]}
+  => {"@type"=>"d", "@rid"=>"#4:0", "@version"=>0, "@class"=>"OUser", "name"=>"admin", "password"=>"{SHA-256}8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918", "status"=>"ACTIVE", "roles"=>["#3:0"]}
+  => {"@type"=>"d", "@rid"=>"#3:0", "@version"=>0, "@class"=>"ORole", "name"=>"admin", "mode"=>1, "rules"=>{}, "@fieldTypes"=>"mode=b"}
+
+
+  client.drop_class CLASS
+  client.disconnect
+
+
+== INSTALL
+
+  > sudo gem install orientdb4r
+
+* gem published on http://rubygems.org/gems/orientdb4r
+
+=== Important Upgrade Notice
+
+* see changelog.txt
+
+
+== FEATURES/PROBLEMS
+
+* Supports only REST API right now
+
+== REQUIREMENTS
+
+Tested on
+* Ruby 1.9.3
+* OrientDB 1.0.0
+* OrientDB 1.0.1
+* OrientDB 1.1.0-SNAPSHOT r5913+
+
+== TESTS
+In order to run the tests you only need to:
+
+  cd /path/to/repository
+  rake test
+
+Start an instance of OrientDB (on localhost with default web port 2480 and 'admin/admin' account) before running.
+
+== AUTHOR
+
+* vaclav.sykora@gmail.com
+* https://plus.google.com/115674031373998885915
+
+== LICENSE
+
+* Apache License, Version 2.0, http://www.apache.org/licenses/
+* see LICENSE file for more details...
