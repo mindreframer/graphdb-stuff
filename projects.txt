@@ -2,3 +2,5 @@ https://github.com/veny/orientdb4r.git
 https://github.com/iansrobinson/graph-databases-use-cases.git
 https://github.com/iansrobinson/neo4j-good-practices.git
 https://github.com/iansrobinson/cypher-recipes.git
+https://github.com/nviennot/nobrainer.git
+https://github.com/aemadrid/orientdb-jruby.git
