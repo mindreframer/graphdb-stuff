@@ -5,6 +5,10 @@
       JRuby wrapper for OrientDB
        94 commits, last change: 2013-03-20 09:22:21, 32 stars, 6 forks
 
+    andreasronge/neo4j:
+      A Graph Database for JRuby. It uses the java lib neo4j as storage and lucene for quering/indexing
+       1000+ commits, last change: 2013-07-04 20:36:38, 567 stars, 86 forks
+
     iansrobinson/cypher-recipes:
       Examples of using Cypher to accomplish different tasks
        7 commits, last change: 2013-06-24 01:14:16, 0 stars, 0 forks
