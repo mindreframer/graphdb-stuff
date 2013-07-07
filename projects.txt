@@ -1,0 +1,2 @@
+https://github.com/veny/orientdb4r.git
+https://github.com/iansrobinson/graph-databases-use-cases.git
