@@ -1,0 +1,89 @@
+= orientdb
+
+orientdb is a little gem that wraps the Java OrientDB library into a more comfortable Ruby package (in JRuby, of course).
+
+== What is OrientDB?
+
+According to the website:
+
+OrientDB is a new Open Source NoSQL DBMS born with the best features of all the others. It's written in Java and it's amazing fast: can store up to 150,000 records per second on common hardware. Even if it's Document based database the relationships are managed as in Graph Databases with direct connections among records. You can travere entire or part of trees and graphs of records in few milliseconds. Supports schema-less, schema-full and schema-mixed modes. Has a strong security profiling system based on user and roles and support the SQL between the query languages. Thank to the SQL layer it's straightforward to use it for people skilled in Relational world.
+
+== Getting started
+
+Let's get the gem installed and test out the interactive console.
+
+  shell> rvm jruby
+  shell> gem install orientdb
+  shell> orientdb_console
+
+  >> db = OrientDB::DocumentDatabase.connect "remote:localhost/demo", 'admin', 'admin'
+  => #<OrientDB::Database:0x6a346239 @proxy_object=#<Java::ComOrientechnologiesOrientCoreDbDocument::ODatabaseDocumentTx:0x14860315>
+  >> customer = db.get_class "Customer"
+  => #<OrientDB::OClass:Customer name:string>
+  >> customer.add :name, :string
+  => true
+  >> db.schema.save
+  => #<Java::ComOrientechnologiesOrientCoreMetadataSchema::OSchema:0x4a5afcb1>
+  >> invoice = db.get_or_create_class "Invoice"
+  => #<OrientDB::OClass:Invoice id:integer date:date customer:link total:float>
+  >> invoice.add :id, :int
+  => true
+  >> invoice.add :date, :date
+  => true
+  >> invoice.add :total, :float
+  => true
+  >> invoice.add :customer, customer
+  => true
+  >> db.schema.save
+  => #<Java::ComOrientechnologiesOrientCoreMetadataSchema::OSchema:0x4a5afcb1>
+  >> c1 = OrientDB::Document.create db, "Customer", :name => "Leonardo"
+  => #<OrientDB::Document:Customer name:Leonardo>
+  >> i1 = OrientDB::Document.create db, "Invoice", :id => 1, :data => DateTime.now, :total => 350.75, :customer => c1
+  => #<OrientDB::Document:Invoice total:350.75 id:1 data:Wed Nov 02 18:21:13 MDT 3910 customer:#<OrientDB::Document:Customer name:Leonardo>>
+  >> i2 = OrientDB::Document.new db, "Invoice", :id => 12
+  => #<OrientDB::Document:Invoice id:12>
+  >> i2.date = DateTime.now
+  => #<DateTime: 5893210835369/2400000,-1/4,2299161>
+  >> i2.total = 275.25
+  => 275.25
+  >> i2.customer = c1
+  => #<OrientDB::Document:Customer name:Leonardo>
+  >> i2.extra = [3.50, 0.75]
+  => [3.5, 0.75]
+  >> i2.save
+  => #<Java::ComOrientechnologiesOrientCoreRecordImpl::ODocument:0x18b9459c>
+  >> i2
+  => #<OrientDB::Document:Invoice total:275.25 id:12 extra:3.50.75 customer:#<OrientDB::Document:Customer name:Leonardo> date:Wed Nov 02 18:21:13 MDT 3910>
+  >> db.count_class "Customer"
+  => 1
+  >> db.count_class "Invoice"
+  => 2
+  >> cs = db.all_in_class "Customer"
+  => [#<OrientDB::Document:Customer name:Leonardo>]
+  >> c1 = cs.first
+  => #<OrientDB::Document:Customer name:Leonardo>
+  >> is = db.all_in_class "Invoice"
+  => [#<OrientDB::Document:Invoice total:275.25 id:12 extra:[3.5, 0.75] customer:#<OrientDB::Document:Customer name:Leonardo> date:Wed Nov 02 18:21:13 MDT 3910>, #<OrientDB::Document:Invoice total:350.75 id:1 data:61246887673000 customer:#<OrientDB::Document:Customer name:Leonardo>>]
+  >> i1 = is.first
+  => #<OrientDB::Document:Invoice total:275.25 id:12 extra:[3.5, 0.75] customer:#<OrientDB::Document:Customer name:Leonardo> date:Wed Nov 02 18:21:13 MDT 3910>
+  >> i2 = is.last
+  => #<OrientDB::Document:Invoice total:350.75 id:1 data:61246887673000 customer:#<OrientDB::Document:Customer name:Leonardo>>
+
+== Contributors
+
+* Topper Bowers @tobowers - Updated jars to 1.20 and added graph capabilities.
+* Ben Lamothe @zonotope - Updated jars to 1.30.
+
+== Note on Patches/Pull Requests
+
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2010 Adrian Madrid. See LICENSE for details.
