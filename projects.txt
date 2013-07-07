@@ -7,3 +7,4 @@ https://github.com/maxdemarzi/neo_love.git
 https://github.com/maxdemarzi/neography.git
 https://github.com/nviennot/nobrainer.git
 https://github.com/veny/orientdb4r.git
+https://github.com/andreasronge/neo4j.git
