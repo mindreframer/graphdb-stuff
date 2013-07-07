@@ -1,0 +1,31 @@
+0.3.3 2012-12-16
+- Enhancement #18 : Added 'abstract' option into creating a new class
+- Enhancement #19 : Added GET - List Databases
+
+0.3.2 2012-11-02
+- Enhancement #13 : configurable User-Agent request header
+- Enhancement #16 : configurable Recovery Time in Load Balancing
+
+0.3.1 2012-08-27
+- Timeout for reuse of dirty (already failed) nodes in load balancing
+- Bug Fix #14, #15
+
+0.3.0 2012-08-01
+- introduced support for cluster of distributed servers
+- initial strategies for load balancing: sequence, round robin
+- Keep-Alive feature: Excon HTTP library is fully working
+
+0.2.10 2012-07-21
+- experimental support for Excon HTTP library with Keep-Alive connection
+
+0.2.9 2012-07-18
+- introduced class Rid
+- added feature Client#delete_database
+
+0.2.8 2012-07-16
+- changed and stabilized exception handling
+- added feature Client#create_class(:properties)
+
+0.2.7 2012-07-07
+- changed design to support distributed server
+- added method Client#class_exists?
