@@ -1,0 +1,15 @@
+coverage
+.DS_Store
+TAGS
+*.rbc
+Gemfile.lock
+.idea
+*.iml
+neo4j
+pkg/*
+*.gem
+.bundle
+log/*
+.rvmrc
+Gemfile.lock
+*.swp
