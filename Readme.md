@@ -11,6 +11,10 @@
       A Graph Database for JRuby. It uses the java lib neo4j as storage and lucene for quering/indexing
        1000+ commits, last change: 2013-07-04 20:36:38, 568 stars, 86 forks
 
+    GraphChi/graphchi-cpp:
+      GraphChi's C++ version. Big Data - small machine.
+       858 commits, last change: 2013-10-24 15:04:33, 89 stars, 30 forks
+
     iansrobinson/cypher-recipes:
       Examples of using Cypher to accomplish different tasks
        7 commits, last change: 2013-06-24 01:14:16, 0 stars, 0 forks
